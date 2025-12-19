@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The End of Alzheimer's</title>
+    <!-- FAVICON VAZIO -->
+    <link rel="icon" href="data:,">
+    <link rel="preload" as="image" href="video.png">
+    
+    <!-- ============================================
+         CSS - ESTILOS DA PÁGINA
+         - Variáveis CSS para modo Dark/Light
+         - Estilos responsivos
+         - Animações otimizadas
+    ============================================ -->
+    <style>
+        /* ==========================================
+           VARIÁVEIS CSS - MODO DARK
+        ========================================== */
+        :root {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2d2d2d;
+            --text-primary: #ffffff;
+            --text-secondary: #e0e0e0;
+            --accent-red: #d32f2f;
+            --accent-red-dark: #b71c1c;
+            --accent-green: #2e7d32;
+            --accent-green-hover: #1b5e20;
+            --border-color: #444444;
+            --shadow-color: rgba(211, 47, 47, 0.4);
+            --card-bg: #252525;
+        }
+
+        /* ==========================================
+           VARIÁVEIS CSS - MODO LIGHT
+        ========================================== */
+        .light-mode {
+            --bg-primary: #f5f5f5;
+            --bg-secondary: #ffffff;
+            --text-primary: #1a1a1a;
+            --text-secondary: #333333;
+            --border-color: #cccccc;
+            --shadow-color: rgba(211, 47, 47, 0.3);
+            --card-bg: #ffffff;
+        }
+
+        /* ==========================================
+           RESET E ESTILOS BASE
+           Remove margens padrão do navegador
+        ========================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* ==========================================
+           CONTAINER PRINCIPAL
+           Centraliza conteúdo e define largura máxima
+        ========================================== */
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 20px 15px 40px;
+        }
+
+        /* ==========================================
+           TOGGLE DARK/LIGHT MODE
+           Botão fixo no canto superior direito
+        ========================================== */
+        .theme-toggle {
+            position: fixed;
+            top: 15px;
+            right: 30px; /* Mais para esquerda no desktop */
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 50px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.05);
+        }
+
+        .theme-toggle .icon {
+            font-size: 18px;
+        }
+
+        /* Esconde o label no mobile */
+        .theme-toggle .label {
+            display: inline;
+        }
+
+        /* ==========================================
+           TÍTULO PRINCIPAL
+           "THE END OF ALZHEIMER'S"
+        ========================================== */
+        .main-title {
+            text-align: center;
+            font-size: clamp(28px, 6vw, 42px);
+            font-weight: 800;
+            margin-bottom: 25px;
+            font-style: italic;
+            color: var(--accent-red);
+        }
+
+        .main-title .highlight {
+            background-color: var(--accent-red);
+            color: #ffffff;
+            padding: 2px 8px;
+            text-decoration: underline;
+        }
+
+        /* ==========================================
+           CAIXA DE TEXTO/QUOTE
+           Box com borda contendo a citação
+        ========================================== */
+        .quote-box {
+            border: 2px solid var(--border-color);
+            padding: 20px 25px;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: clamp(15px, 3.5vw, 18px);
+            font-style: italic;
+            color: var(--text-secondary);
+            background-color: var(--card-bg);
+            border-radius: 4px;
+        }
+
+        .quote-box strong {
+            color: var(--text-primary);
+        }
+
+        .quote-box .blueberry {
+            color: var(--accent-red);
+            font-weight: bold;
+        }
+
+        /* ==========================================
+           CONTAINER DO VÍDEO
+           Inclui sombra vermelha/rosa na borda
+        ========================================== */
+        .video-container {
+            position: relative;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            /* SOMBRA NA BORDA DO VÍDEO */
+            box-shadow: 
+                0 0 20px var(--shadow-color),
+                0 0 40px var(--shadow-color),
+                0 10px 30px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .video-container:hover {
+            transform: scale(1.02);
+            box-shadow: 
+                0 0 30px var(--shadow-color),
+                0 0 60px var(--shadow-color),
+                0 15px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .video-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* ==========================================
+           DTC (DIRECT TO CONSUMER) - OFERTA
+           Aparece após 15 segundos de delay
+        ========================================== */
+        .dtc-container {
+            margin-top: 20px;
+            text-align: center;
+            /* ESCONDIDO INICIALMENTE */
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: opacity 0.5s ease, max-height 0.5s ease;
+        }
+
+        /* CLASSE ADICIONADA APÓS 15 SEGUNDOS */
+        .dtc-container.visible {
+            opacity: 1;
+            max-height: 500px;
+        }
+
+        .dtc-container img {
+            max-width: 350px;
+            width: 100%;
+            height: auto;
+            /* SEM SOMBRA - imagem PNG com fundo transparente */
+        }
+
+        /* ==========================================
+           TEXTO ABAIXO DO VÍDEO
+           "Click the button to see..."
+        ========================================== */
+        .sub-text {
+            text-align: center;
+            font-size: clamp(14px, 3vw, 16px);
+            color: var(--text-secondary);
+            margin: 25px 0;
+            padding: 0 10px;
+        }
+
+        /* ==========================================
+           LINHA DIVISÓRIA
+        ========================================== */
+        .divider {
+            border: none;
+            border-top: 1px solid var(--border-color);
+            margin: 30px 0;
+        }
+
+        /* ==========================================
+           BOTÃO CTA PULSANTE
+           Animação de pulse para chamar atenção
+        ========================================== */
+        .cta-button {
+            display: block;
+            width: 100%;
+            max-width: 520px;
+            margin: 0 auto 20px;
+            padding: 18px 30px;
+            background-color: var(--accent-green);
+            color: #ffffff;
+            text-align: center;
+            text-decoration: none;
+            font-size: clamp(14px, 3.5vw, 18px);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            /* ANIMAÇÃO PULSANTE */
+            animation: pulse 2s infinite;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .cta-button:hover {
+            background-color: var(--accent-green-hover);
+            transform: scale(1.02);
+            animation: none;
+        }
+
+        /* KEYFRAMES DA ANIMAÇÃO PULSANTE */
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(46, 125, 50, 0.7);
+            }
+            50% {
+                box-shadow: 0 0 0 15px rgba(46, 125, 50, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(46, 125, 50, 0);
+            }
+        }
+
+        /* ==========================================
+           AVAILABLE PLACES
+           Mostra número aleatório de 01-35
+        ========================================== */
+        .available-places {
+            text-align: center;
+            font-size: clamp(16px, 4vw, 20px);
+            color: var(--text-secondary);
+        }
+
+        .available-places .number {
+            color: var(--accent-red);
+            font-weight: 700;
+            font-size: clamp(18px, 4.5vw, 24px);
+        }
+
+        /* ==========================================
+           RESPONSIVIDADE - AJUSTES MOBILE
+        ========================================== */
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px 12px 30px;
+            }
+
+            .quote-box {
+                padding: 15px 18px;
+            }
+
+            /* Botão circular só com ícone no mobile */
+            .theme-toggle {
+                top: auto;
+                bottom: 20px; 
+                right: 20px;
+                padding: 0;
+                border-radius: 50%;
+                width: 44px;
+                height: 44px;
+                justify-content: center;
+                align-items: center;
+                gap: 0;
+            }
+
+            /* Esconde o texto no mobile */
+            .theme-toggle .label {
+                display: none;
+            }
+
+            .theme-toggle .icon {
+                font-size: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                line-height: 1;
+            }
+
+            .cta-button {
+                padding: 15px 20px;
+            }
+        }
+
+        /* ==========================================
+           OTIMIZAÇÕES DE PERFORMANCE
+           - Usa GPU para animações
+           - Reduce motion para acessibilidade
+        ========================================== */
+        @media (prefers-reduced-motion: reduce) {
+            .cta-button {
+                animation: none;
+            }
+            
+            * {
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Força GPU para animações suaves */
+        .video-container,
+        .cta-button,
+        .theme-toggle {
+            will-change: transform;
+            transform: translateZ(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- ============================================
+         BOTÃO TOGGLE DARK/LIGHT MODE
+    ============================================ -->
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Alternar modo claro/escuro">
+        <span class="icon">🌙</span>
+        <span class="label">Dark</span>
+    </button>
+
+    <!-- ============================================
+         CONTAINER PRINCIPAL
+    ============================================ -->
+    <div class="container">
+        
+        <!-- TÍTULO PRINCIPAL -->
+        <h1 class="main-title">
+            THE END OF <span class="highlight">ALZHEIMER'S</span>
+        </h1>
+
+        <!-- CAIXA DE CITAÇÃO -->
+        <div class="quote-box">
+            <strong>Sylvester Stallone's daughter</strong> reveals that her 
+            father reversed early stages of dementia thanks to a 
+            <span class="blueberry">Blueberry Trick</span>, which is shaking up neuroscience 
+            and is being considered a potential <strong>"natural cure"</strong> 
+            for dementia and even for Alzheimer's.
+        </div>
+
+        <!-- THUMBNAIL DO VÍDEO COM SOMBRA -->
+        <div class="video-container">
+            <img src="video.png" alt="Sophia Stallone video about Blueberry Trick" loading="eager">
+        </div>
+
+        <!-- DTC - APARECE APÓS 15 SEGUNDOS -->
+        <div class="dtc-container" id="dtcContainer">
+            <img src="dtc.png" alt="Product Offer - 6 Bottles Special" loading="lazy">
+        </div>
+
+        <!-- TEXTO ABAIXO DO VÍDEO -->
+        <p class="sub-text">
+            Click the button to see how to make it from your kitchen<br>
+            and wipe out brain fog in as little as 48 hours
+        </p>
+
+        <!-- LINHA DIVISÓRIA -->
+        <hr class="divider">
+
+        <!-- BOTÃO CTA PULSANTE -->
+        <a href="#" class="cta-button">
+            Click to Watch How to Restore Your Sharp Memory
+        </a>
+
+        <!-- AVAILABLE PLACES COM NÚMERO ALEATÓRIO -->
+        <p class="available-places">
+            Available Places: <span class="number" id="availablePlaces">18</span>
+        </p>
+
+    </div>
+
+    <!-- ============================================
+         JAVASCRIPT - FUNCIONALIDADES
+         - Número aleatório nos Available Places
+         - Toggle Dark/Light mode
+         - Delay de 15s para mostrar DTC
+    ============================================ -->
+    <script>
+        /* ==========================================
+           NÚMERO ALEATÓRIO - AVAILABLE PLACES
+           Gera número entre 01 e 35 ao carregar a página
+        ========================================== */
+        (function setRandomPlaces() {
+            // Gera número aleatório entre 1 e 35
+            const randomNumber = Math.floor(Math.random() * 35) + 1;
+            // Atualiza o elemento na página
+            document.getElementById('availablePlaces').textContent = randomNumber;
+        })();
+
+        /* ==========================================
+           TOGGLE DARK/LIGHT MODE
+           Alterna entre os modos de interface
+        ========================================== */
+        function toggleTheme() {
+            const body = document.body;
+            const toggle = document.querySelector('.theme-toggle');
+            const icon = toggle.querySelector('.icon');
+            const label = toggle.querySelector('.label');
+
+            // Alterna a classe light-mode no body
+            body.classList.toggle('light-mode');
+
+            // Atualiza ícone e texto do botão
+            if (body.classList.contains('light-mode')) {
+                icon.textContent = '☀️';
+                label.textContent = 'Light';
+            } else {
+                icon.textContent = '🌙';
+                label.textContent = 'Dark';
+            }
+        }
+
+        /* ==========================================
+           DELAY DE 15 SEGUNDOS - DTC
+           Mostra o DTC após 15 segundos
+        ========================================== */
+        setTimeout(function showDTC() {
+            const dtcContainer = document.getElementById('dtcContainer');
+            // Adiciona classe para mostrar com animação
+            dtcContainer.classList.add('visible');
+        }, 15000); // 15000ms = 15 segundos
+    </script>
+</body>
+</html>
+
